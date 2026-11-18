@@ -1,0 +1,44 @@
+{
+  "seed": 2026111803,
+  "calibration_studies_per_length": 600,
+  "test_studies_per_model_and_length": 600,
+  "independent_trajectories_per_study": 24,
+  "lengths_are_nested": true,
+  "windows_per_trajectory": [
+    256,
+    1024,
+    4096
+  ],
+  "bias": 0.5236390383349397,
+  "rates_per_sample": [
+    0.7618195191674699,
+    0.23818048083253013
+  ],
+  "control_flip_per_sample": 0.36504153186312926,
+  "pair_matrix": [
+    [
+      0.0,
+      0.11589310593907465,
+      0.06662765999249001
+    ],
+    [
+      0.11589310593907465,
+      0.4031722562587214,
+      0.11589310593907462
+    ],
+    [
+      0.06662765999249001,
+      0.11589310593907462,
+      0.0
+    ]
+  ],
+  "max_pair_mismatch": 1.1102230246251565e-16,
+  "expected_contrasts": {
+    "driven": 0.002439079035982804,
+    "opposite": -0.002439079035982804,
+    "equilibrium": -6.938893903907228e-18
+  },
+  "driven_PRE": 0.04270158938569123,
+  "driven_REP": 0.04026251034970842,
+  "observations": "synthetic ideal measurement; quantile calibration is conditional and model-specific"
+}

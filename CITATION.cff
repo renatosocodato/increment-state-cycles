@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository."
+title: "Increment-state cycles: reproducible calculations and figures"
+type: software
+authors:
+  - family-names: Socodato
+    given-names: Renato
+    affiliation: "University of Porto"
+license: MIT
