@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Regenerate numeric outputs in a temporary copy and compare saved tables."""
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from pathlib import Path
 import json, math, os, shutil, subprocess, sys, tempfile
 import pandas as pd
@@ -15,14 +18,15 @@ jobs=[
  ('versao_expandida_20261117/calibracao_independente_20261117/synthetic_calibration.py',['studies.csv','summary.csv']),
  ('versao_expandida_20261117/calibracao_independente_20261117/prepare_plot.py',['plot_estimates.csv']),
  ('recuperacao_fisica_20261118/estudo_fisico.py',['estudos_independentes.csv','resumo_recuperacao.csv','parametros_e_verificacoes.json'])]
-env=dict(os.environ,OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1')
+env=dict(os.environ,OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',VECLIB_MAXIMUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1')
 timeout=int(os.environ.get('EPJE_JOB_TIMEOUT_SECONDS','300'))
 if timeout<=0: raise ValueError('EPJE_JOB_TIMEOUT_SECONDS must be a positive number of seconds')
 def compare(p,q):
  if p.suffix == '.json':
   def same(a,b):
    if isinstance(a,bool) or isinstance(b,bool): return type(a) is type(b) and a==b
-   if isinstance(a,(int,float)) and isinstance(b,(int,float)): return math.isclose(a,b,rel_tol=1e-10,abs_tol=1e-12)
+   if isinstance(a,int) or isinstance(b,int): return type(a) is int and type(b) is int and a == b
+   if isinstance(a,float) and isinstance(b,float): return math.isclose(a,b,rel_tol=1e-10,abs_tol=1e-12)
    if isinstance(a,dict) and isinstance(b,dict): return a.keys()==b.keys() and all(same(a[k],b[k]) for k in a)
    if isinstance(a,list) and isinstance(b,list): return len(a)==len(b) and all(same(x,y) for x,y in zip(a,b))
    return type(a) is type(b) and a==b

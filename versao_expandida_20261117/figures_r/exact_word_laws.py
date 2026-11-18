@@ -1,4 +1,7 @@
 """Finite exact hidden-phase word laws; no Monte Carlo and no biological data."""
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from fractions import Fraction as Q
 from itertools import product
 from pathlib import Path

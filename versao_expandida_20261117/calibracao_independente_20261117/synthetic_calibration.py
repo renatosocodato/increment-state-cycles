@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Synthetic independent classification calibration; frozen study design."""
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from pathlib import Path
 import csv,sys,math
 import numpy as np

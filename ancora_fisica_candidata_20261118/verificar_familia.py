@@ -1,3 +1,6 @@
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 import sympy as s
 from itertools import product
 b,d=s.symbols('b d',positive=True); t=b+d; h=[0,1,1,0,1,0]; Q=s.zeros(6)

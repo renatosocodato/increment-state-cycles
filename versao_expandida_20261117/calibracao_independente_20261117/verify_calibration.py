@@ -1,3 +1,6 @@
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from pathlib import Path
 from itertools import product
 import sys

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Reconstruct stationary rotor word laws and check their finite-study summaries."""
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from itertools import product
 from pathlib import Path
 import json
@@ -69,6 +72,12 @@ def main():
     assert meta['lengths_are_nested'] is True and meta['independent_trajectories_per_study'] == 24
     truth = reconstruct(meta)
     assert len(raw) == 3 * 4 * 600
+    values = raw.contrast.to_numpy(dtype=float)
+    if not np.isfinite(values).all() or np.any(np.abs(values) > 1):
+        raise ValueError('Rotor contrasts must be finite and between -1 and 1')
+    counts = values * raw.windows_per_trajectory.to_numpy(dtype=float) * 24
+    if not np.allclose(counts, np.rint(counts), rtol=0, atol=1e-8):
+        raise ValueError('Rotor contrasts are inconsistent with integer window counts')
     assert set(zip(raw.windows_per_trajectory, raw.group, raw.study)) == set(
         product(WINDOWS, ('calibration_control', *ARMS), range(600)))
     assert len(summary) == 9

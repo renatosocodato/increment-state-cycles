@@ -1,4 +1,7 @@
 """Exact arithmetic checks for the parity note; no simulation or file writes."""
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from collections import Counter
 from fractions import Fraction as F
 from itertools import product

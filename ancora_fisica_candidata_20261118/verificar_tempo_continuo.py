@@ -1,3 +1,6 @@
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 import numpy as np
 from scipy.linalg import expm
 from scipy.optimize import brentq

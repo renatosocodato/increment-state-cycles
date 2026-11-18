@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+if not __debug__:
+    raise SystemExit('Python optimization disables required checks; run without -O or PYTHONOPTIMIZE.')
 from pathlib import Path
 import csv, math, sys
 import numpy as np
