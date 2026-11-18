@@ -35,3 +35,5 @@ for gamma in [0.25,0.5,1.0]:
   Jr,_,delta_reversed,fr=measures(gamma,-root)
   assert np.max(np.abs(J-Jr))<1e-12 and abs(delta+delta_reversed)<1e-12 and abs(f-fr)<1e-12
   print('ROOT',root,'max_pair_difference',np.max(np.abs(J-Jc)),'triple',delta,'switch',f,'sigma_per_sample',gamma*root*np.log((1+root)/(1-root)))
+ else:
+  raise AssertionError(f'No matching-point sign change for gamma={gamma}')

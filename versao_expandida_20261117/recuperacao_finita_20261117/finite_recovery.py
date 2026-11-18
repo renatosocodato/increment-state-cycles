@@ -14,7 +14,9 @@ def pair_kernel(rho):
 
 def simulate(model,n,rho,rng):
     if model=='markov':
-        states=rng.integers(0,3,size=NREP);cum=np.cumsum(pair_kernel(rho),axis=1)
+        states=rng.integers(0,3,size=NREP);kernel=pair_kernel(rho)
+        assert np.all(kernel>=0) and np.allclose(kernel.sum(axis=1),1,rtol=0,atol=1e-12)
+        cum=np.cumsum(kernel,axis=1);cum[:,-1]=1.0
     else:
         nphase=6 if model=='directed' else 12
         states=rng.integers(0,nphase,size=NREP)
@@ -38,7 +40,7 @@ def simulate(model,n,rho,rng):
 def wilson(k,n):
     z=1.959963984540054;p=k/n;d=1+z*z/n;center=(p+z*z/(2*n))/d
     half=z*math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d
-    return center-half,center+half
+    return max(0.0,center-half),min(1.0,center+half)
 def main():
     seedseq=np.random.SeedSequence(SEED);streams=iter(seedseq.spawn(len(RHO)*len(LENGTH)*4))
     summaries=[];samples=[]

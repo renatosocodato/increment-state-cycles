@@ -13,9 +13,20 @@ matdf<-function(m){d<-expand.grid(i=states,j=states,stringsAsFactors=FALSE);d$p<
 matplot<-function(m,den){d<-matdf(m);ggplot(d,aes(j,i,fill=p/den))+geom_tile(colour='white',linewidth=.4)+geom_text(aes(label=p),family='Arial',size=3.2,colour=ink)+scale_fill_gradient(low='#F1F4F6',high='#A7C0D2',guide='none')+coord_fixed()+labs(x='Next symbol',y='Current symbol')+th()+theme(axis.line=element_blank(),axis.ticks=element_blank())}
 # Figure 1: physical parity and distinct parent counterexamples.
 a<-ggplot()+annotate('text',x=.6,y=3.6,label='E',family='Arial',size=5,colour=navy)+annotate('text',x=1.3,y=3.6,label='P',family='Arial',size=5,colour=navy)+annotate('text',x=2.7,y=3.6,label='P',family='Arial',size=5,colour=gold)+annotate('text',x=3.4,y=3.6,label='R',family='Arial',size=5,colour=gold)+annotate('segment',x=.78,xend=1.12,y=3.6,yend=3.6,linewidth=.38,arrow=grid::arrow(length=grid::unit(1.7,'mm')),colour=ink)+annotate('segment',x=1.55,xend=2.4,y=3.6,yend=3.6,linewidth=.38,arrow=grid::arrow(length=grid::unit(1.7,'mm')),colour=ink)+annotate('segment',x=2.88,xend=3.22,y=3.6,yend=3.6,linewidth=.38,arrow=grid::arrow(length=grid::unit(1.7,'mm')),colour=ink)+annotate('text',x=2,y=2.85,label='reverse order and exchange E and R',family='Arial',size=3,colour=ink)+annotate('text',x=2,y=2.15,label='q[1] == J[EE] - J[RR]',parse=TRUE,size=3.8,colour=ink)+annotate('text',x=2,y=1.5,label='q[2] == J[EP] - J[PR]',parse=TRUE,size=3.8,colour=ink)+xlim(0,4)+ylim(1,4)+void()
-b<-matplot(matrix(c(18,153,39,75,652,153,117,75,18),3,byrow=TRUE),1300)
-c<-matplot(matrix(c(4,2,2,2,1,1,2,1,1),3,byrow=TRUE),16)
-m0<-matrix(4,3,3);m1<-matrix(c(5,3,4,3,4,5,4,5,3),3,byrow=TRUE);d0<-matdf(m0);d0$model<-'J0';d1<-matdf(m1);d1$model<-'J1';dm<-rbind(d0,d1)
+bmat<-matrix(c(18,153,39,75,652,153,117,75,18),3,byrow=TRUE)
+cmat<-matrix(c(4,2,2,2,1,1,2,1,1),3,byrow=TRUE)
+# Independently reconstruct the 3-position parent's pair table used in panel b.
+parent<-matrix(c(.7,.3,0,.1,.3,.6,0,.2,.8),3,byrow=TRUE); pi0<-c(1,3,9)/13
+pair_check<-matrix(0,3,3)
+symbol<-function(i,j) if(j>i) 1 else if(j==i) 2 else 3
+for(i in 1:3) for(j in 1:3) for(k in 1:3) pair_check[symbol(i,j),symbol(j,k)]<-pair_check[symbol(i,j),symbol(j,k)]+pi0[i]*parent[i,j]*parent[j,k]
+stopifnot(max(abs(pair_check-bmat/1300))<1e-12)
+stopifnot(max(abs(tcrossprod(c(.5,.25,.25))-cmat/16))<1e-12)
+b<-matplot(bmat,1300)
+c<-matplot(cmat,16)
+m0<-matrix(4,3,3);m1<-matrix(c(5,3,4,3,4,5,4,5,3),3,byrow=TRUE)
+stopifnot(all(rowSums(m1)==12),all(colSums(m1)==12),m1[1,1]-m1[3,3]==2,m1[1,2]-m1[2,3]==-2)
+d0<-matdf(m0);d0$model<-'J0';d1<-matdf(m1);d1$model<-'J1';dm<-rbind(d0,d1)
 d<-ggplot(dm,aes(j,i,fill=p))+geom_tile(colour='white',linewidth=.4)+geom_text(aes(label=p),family='Arial',size=3.1,colour=ink)+facet_wrap(~model,nrow=1)+scale_fill_gradient(low='#F1F4F6',high='#A7C0D2',guide='none')+coord_fixed()+labs(x='Next symbol',y='Current symbol')+th()+theme(strip.background=element_blank(),strip.text=element_text(size=10,colour=ink),axis.line=element_blank(),axis.ticks=element_blank())
 export(tagged(a,b,c,d),'Figure_1')
 noise<-read.csv(file.path(here,'noise_exact.csv'));pairs<-read.csv(file.path(here,'pairs_eta025.csv'));words<-read.csv(file.path(here,'words_eta025.csv'))

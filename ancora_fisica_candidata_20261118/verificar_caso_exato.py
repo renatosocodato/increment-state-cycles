@@ -25,5 +25,7 @@ for w in map(''.join,product('EPR',repeat=3)):
  assert s.simplify(prob(B,w)-prob(B,reverse(w)))==0
 print('delta3',s.simplify(prob(A,'PRE')-prob(A,'REP')))
 print('formula',s.simplify((b**3-d**3)/6))
-print('difference',s.simplify(prob(A,'PRE')-prob(A,'REP')-(b**3-d**3)/6))
+difference=s.simplify(prob(A,'PRE')-prob(A,'REP')-(b**3-d**3)/6)
+assert difference==0
+print('difference',difference)
 print('params',b,d,'P+ P-',s.simplify(prob(A,'PRE')),s.simplify(prob(A,'REP')))

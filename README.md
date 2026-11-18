@@ -8,9 +8,11 @@ The files were prepared and tested in Python 3.14.7, NumPy 2.3.5, SciPy 1.16.3, 
 
 In a virtual environment install Python dependencies with `python -m pip install -r requirements.txt`. In R install `ggplot2`, `cowplot`, `svglite`, `ragg`, and `jsonlite`. Scripts use paths relative to their own location. Run from a writable copy: several generation scripts overwrite their saved tables and figure files. Use a single CPU thread for the simulation: `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`.
 
+`DATA_DICTIONARY.md` maps every saved table and its columns to their scientific role.
+
 ## Verify published numerical results
 
-From this directory run `python3 run_checks.py`. This reads the saved data and checks the exact pair examples, reconstruction of simulation summaries, the classification channel, and the finite physical model. It does not rerun large Monte Carlo jobs. `published_figures/Figure_1.pdf` through `Figure_5.pdf` are the exact vector PDFs included in the manuscript proof; their SHA-256 digests are recorded in `SHA256SUMS`.
+From this directory run `python3 run_checks.py`. This reads the saved data and checks the exact pair examples, reconstruction of simulation summaries, the classification channel, and the finite physical model. It does not rerun large Monte Carlo jobs. `python3 test_checks.py` runs negative controls on temporary copies to ensure missing outputs, empty summaries and a corrupted pair matrix are rejected. `published_figures/Figure_1.pdf` through `Figure_5.pdf` are the exact vector PDFs included in the manuscript proof; their SHA-256 digests are recorded in `SHA256SUMS`.
 
 ## Recreate the five main figures from the supplied saved tables
 
@@ -42,7 +44,7 @@ python3 versao_expandida_20261117/calibracao_independente_20261117/prepare_plot.
 python3 recuperacao_fisica_20261118/estudo_fisico.py
 ```
 
-The independent-study counts and lengths can make these jobs substantially more expensive than `run_checks.py`. Run one numerical job at a time. `python3 verify_regeneration.py` copies the package into a temporary directory, reruns the numerical generators and compares the resulting CSV files to the saved tables within tolerance; it may take longer than the read-only checks. Fixed root seeds are 20261117 (finite symbolic recovery), 20261118 (asymmetric error), 20261119 (synthetic calibration), and 2026111803 (physical-rotor recovery). Streams and parameters are specified by the scripts; the rotor uses 600 calibration studies and 600 independently tested studies per model per length, with 24 trajectories per study. Lengths are nested prefixes, not independent replications. Channel-calibration results use 200 studies per condition with 200 block-bootstrap replicates. The supplied `studies.csv`, trajectory tables and summaries are outputs of these runs, not independent biological measurements.
+The independent-study counts and lengths can make these jobs substantially more expensive than `run_checks.py`. Run one numerical job at a time. `python3 verify_regeneration.py` copies the package into a temporary directory, reruns the numerical generators and removes each expected output before rerunning its producer and compares the resulting CSV and rotor JSON files to the saved files within tolerance; it may take longer than the read-only checks. Each generator has a 300-second limit; on slower machines, set the positive integer `EPJE_JOB_TIMEOUT_SECONDS` to an appropriate finite limit. Fixed root seeds are 20261117 (finite symbolic recovery), 20261118 (asymmetric error), 20261119 (synthetic calibration), and 2026111803 (physical-rotor recovery). Streams and parameters are specified by the scripts; the rotor uses 600 calibration studies and 600 independently tested studies per model per length, with 24 trajectories per study. Lengths are nested prefixes, not independent replications. Channel-calibration results use 200 studies per condition with 200 block-bootstrap replicates. The supplied `studies.csv`, trajectory tables and summaries are outputs of these runs, not independent biological measurements.
 
 ## Scientific assumptions and limits
 

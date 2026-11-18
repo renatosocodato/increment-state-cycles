@@ -14,5 +14,11 @@ def p(D,w):
  for a in w:v=v*D[a]
  return s.factor((v*s.ones(n,1))[0])
 A=mats(Q,h);B=mats(W,[0,1])
-for w in map(''.join,product('EPR',repeat=2)): print(w,'Jdriven=',p(A,w),'difference=',s.factor(p(A,w)-p(B,w)))
-print('delta=',s.factor(p(A,'PRE')-p(A,'REP')))
+g=(b**2-4*b*d+d**2)/18
+expected={'EE':0,'EP':g,'ER':-g,'PE':g,'PP':-2*g,'PR':g,'RE':-g,'RP':g,'RR':0}
+for w in map(''.join,product('EPR',repeat=2)):
+ diff=s.factor(p(A,w)-p(B,w));assert s.simplify(diff-expected[w])==0
+ print(w,'Jdriven=',p(A,w),'difference=',diff)
+delta=s.factor(p(A,'PRE')-p(A,'REP'))
+assert s.simplify(delta-(b**3-d**3)/6)==0
+print('delta=',delta)

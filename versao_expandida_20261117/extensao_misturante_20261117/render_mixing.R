@@ -2,7 +2,10 @@
 args<-grep('^--file=',commandArgs(FALSE),value=TRUE)[1]; here<-dirname(normalizePath(sub('^--file=','',args)))
 suppressPackageStartupMessages({library(ggplot2);library(cowplot);library(svglite)})
 cowplot::set_null_device('agg')
-d<-read.csv(file.path(here,'mixing_curves.csv'));d$kl3<-pmax(d$kl3,0)
+d<-read.csv(file.path(here,'mixing_curves.csv'))
+# Round only numerical noise at zero; a material negative KL is an error.
+if(any(!is.finite(d$kl3)) || any(d$kl3 < -1e-12)) stop('Invalid negative three-symbol divergence')
+d$kl3<-pmax(d$kl3,0)
 navy<-'#315778';gold<-'#93640B';ink<-'#202B37'
 th<-function() theme_classic(base_size=10,base_family='Arial')+theme(text=element_text(colour=ink),axis.text=element_text(size=9,colour=ink),axis.line=element_line(linewidth=.28),axis.ticks=element_line(linewidth=.28),legend.title=element_blank(),legend.position='bottom',legend.text=element_text(size=8),legend.key.width=grid::unit(7,'mm'),plot.margin=margin(17,8,8,17))
 colors<-scale_colour_manual(values=c('Directed'=navy,'Reversible control'=gold))

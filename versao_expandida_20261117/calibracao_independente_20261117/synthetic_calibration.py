@@ -12,7 +12,8 @@ N=3002; NREP=200; B=200; NS=(100,500,2000); BLOCK=30; RHO=.2; ETA=.25
 def trajectories(model,rng):
  nphase=6 if model=='directed' else 12
  phase=rng.integers(0,nphase,size=NREP);out=np.empty((N,NREP),dtype=np.uint8)
- cc=C.cumsum(axis=1)
+ assert np.all(C>=0) and np.allclose(C.sum(axis=1),1,rtol=0,atol=1e-12)
+ cc=C.cumsum(axis=1);cc[:,-1]=1.0
  for t in range(N):
   z=CYCLE[phase].copy();mask=rng.random(NREP)<ETA;z[mask]=rng.integers(0,3,size=mask.sum())
   out[t]=(rng.random(NREP)[:,None]>cc[z]).sum(axis=1)
