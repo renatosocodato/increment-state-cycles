@@ -10,3 +10,8 @@
 - Added a table dictionary and the physical simulation design file, and added the three rotor derivation checks to `run_checks.py`.
 
 No saved numerical table, manuscript figure, scientific model, random seed or parameter was changed by this maintenance pass.
+
+
+## 18 November 2026 — file-integrity check
+
+Added a portable SHA-256 verification command and a negative control for a changed Figure 2 input table. This checks distributed file identity separately from the selective scientific checks; model results and figures were not changed.

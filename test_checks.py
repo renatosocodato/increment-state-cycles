@@ -37,4 +37,10 @@ with tempfile.TemporaryDirectory(prefix='epje_negative_') as temp:
   with p.open('w',newline='') as dest:
    w=csv.DictWriter(dest,fieldnames=names);w.writeheader();w.writerows(rows)
   rejected(t,'run_checks.py','altered '+column+' in '+name);p.write_text(original)
+with tempfile.TemporaryDirectory(prefix='epje_integrity_') as temp:
+ t=Path(temp)/'repo';shutil.copytree(root,t,ignore=shutil.ignore_patterns('.git','__pycache__'))
+ subprocess.run([sys.executable,str(t/'verify_integrity.py')],cwd=t,env=env,check=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=60)
+ p=t/'versao_expandida_20261117/extensao_misturante_20261117/mixing_curves.csv'
+ p.write_bytes(p.read_bytes()+b'\n')
+ rejected(t,'verify_integrity.py','altered Figure 2 input table')
 print('All negative controls passed.')
