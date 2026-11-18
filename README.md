@@ -12,7 +12,7 @@ In a virtual environment install Python dependencies with `python -m pip install
 
 ## Verify published numerical results
 
-From this directory run `python3 run_checks.py`. This reads the saved data and checks the exact pair examples, reconstruction of simulation summaries, the classification channel, and the finite physical model. It does not rerun large Monte Carlo jobs. `python3 test_checks.py` runs negative controls on temporary copies to ensure missing outputs, empty summaries and a corrupted pair matrix are rejected. `published_figures/Figure_1.pdf` through `Figure_5.pdf` are the exact vector PDFs included in the manuscript proof; their SHA-256 digests are recorded in `SHA256SUMS`.
+From this directory run `python3 run_checks.py`. This reads the saved data and checks the exact pair examples, reconstruction of simulation summaries, the classification channel, and the finite physical model. It does not rerun large Monte Carlo jobs. For the symbolic recovery and asymmetric-error studies, the calibration trajectories themselves are not saved: these checks reconstruct exceedance rates conditional on the stored cutoffs, whereas full regeneration recalculates the cutoffs from the recorded random streams. `python3 test_checks.py` runs negative controls on temporary copies to ensure missing outputs, empty summaries and a corrupted pair matrix are rejected. `published_figures/Figure_1.pdf` through `Figure_5.pdf` are the exact vector PDFs included in the manuscript proof; their SHA-256 digests are recorded in `SHA256SUMS`.
 
 ## Recreate the five main figures from the supplied saved tables
 
