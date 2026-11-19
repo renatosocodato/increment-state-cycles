@@ -20,6 +20,25 @@ Provide one nonempty uppercase E/P/R sequence per CSV row in the `sequence` colu
 
 Run the API and CLI tests after installation with `python -m unittest discover -s tests -v`. The installed analysis tools use only the Python standard library.
 
+## Compare modulations across experimental conditions
+
+The v1.1 command takes regularly sampled positions, one sample per row. Use `condition,unit,track,sample,position` as the CSV header. The independent experimental unit might be an animal or independent preparation. Reuse its ID across all nested tracks, give each contiguous track a distinct ID within the unit, and split at missing samples. Sample indices must be consecutive within each track. All tracks must have the same known base sampling interval and a physically even coordinate.
+
+```sh
+increment-state-cycles-compare examples/synthetic_modulation.csv \
+  --reference control --comparison treated \
+  --pause-thresholds 0 0.5 --strides 1 2 \
+  --sampling-interval 0.25 --seed 42
+```
+
+The Python equivalents are `Track`, `symbolise` and `compare_conditions` from `increment_state_cycles.modulation`. For each grid point, positions are subsampled every *stride* samples from the first point in each track. The software then classifies the displacement as P if its absolute value is at most the pause threshold, in coordinate units. The threshold is a displacement threshold, not a speed threshold. The effective time interval is the stride times the base interval, in whatever time unit the caller uses. Sensitivity is to the specified settings and the first-sample origin. The tool does not average over alternate sampling origins.
+
+Within each unit, eligible windows are pooled across its tracks without crossing a track boundary. Each eligible unit contributes equally to the condition mean. The effect is comparison minus reference. Independent designs resample units within each condition. Use `--design paired` when the same units were measured under both conditions. The software then requires matching input IDs and resamples within-unit differences from pairs with usable data for the endpoint. The output lists the eligible IDs at each grid point, since changing the sampling interval can change the units included. If either condition has no eligible units, the difference is unavailable. With fewer than two eligible units per arm or matched pairs, the interval is unavailable.
+
+Intervals are seeded, pointwise percentile bootstrap intervals over independent units or independent matched pairs. They do not cover the entire sensitivity grid jointly. With few units, bounded or discrete estimates can produce unstable or degenerate intervals. The intervals quantify between-unit uncertainty for the chosen window-pooling and sampling protocol, and do not account for classification error, within-unit measurement error, selection of settings, or confounding. A shift across the grid can result from the sampling rule or from changes in which units are eligible. Report the chosen settings and the full grid rather than selecting a point after examining its interval.
+
+Run `python examples/validate_modulation.py` to reproduce the synthetic benchmark for a known null and a known positive difference in q1.
+
 ## Reproduce the article
 
 The EPJ E proof cites baseline commit [`42a4d664`](https://github.com/renatosocodato/increment-state-cycles/tree/42a4d6640adf6c3ab25fd41ca3432e10978652fb). Release v1.0.0 preserves the baseline model and figure sources and their saved results. The article reproduction commands are run from the release source tree:

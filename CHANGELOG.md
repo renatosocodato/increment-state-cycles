@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.0
+
+- Added a Python API and an `increment-state-cycles-compare` CLI for independent and paired experimental designs.
+- Added unit-level estimates, pointwise bootstrap intervals, and sensitivity grids for pause thresholds and sampling intervals.
+- Added a synthetic CSV example, end-to-end tests, and a benchmark with known null and positive effects.
+
 ## v1.0.0
 
 - Added an installable Python API and CSV command for physical reversal and empirical E/P/R contrasts.
