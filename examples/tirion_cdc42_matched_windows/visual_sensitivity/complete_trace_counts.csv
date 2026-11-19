@@ -1,0 +1,7 @@
+selection,mode,stride_min,before_traces,after_traces
+original,same_support,1,27,27
+original,same_support,2,27,27
+original,same_support,4,23,23
+screened,same_support,1,6,6
+screened,same_support,2,6,6
+screened,same_support,4,4,4
