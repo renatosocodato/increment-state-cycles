@@ -1,0 +1,13 @@
+screening_scenario,selection,mode,stride_min,before_traces,after_traces
+sinal_fraco,original,same_support,1,27,27
+sinal_fraco,original,same_support,2,27,27
+sinal_fraco,original,same_support,4,23,23
+sinal_fraco,screened,same_support,1,19,19
+sinal_fraco,screened,same_support,2,19,19
+sinal_fraco,screened,same_support,4,16,16
+inclui_pontas_proximas,original,same_support,1,27,27
+inclui_pontas_proximas,original,same_support,2,27,27
+inclui_pontas_proximas,original,same_support,4,23,23
+inclui_pontas_proximas,screened,same_support,1,14,14
+inclui_pontas_proximas,screened,same_support,2,14,14
+inclui_pontas_proximas,screened,same_support,4,11,11
