@@ -1,9 +1,13 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite this repository."
-title: "Increment-state cycles: reproducible calculations and figures"
+message: "If you use this software, please cite this software release."
+title: "Increment State Cycles"
 type: software
 authors:
   - family-names: Socodato
     given-names: Renato
     affiliation: "University of Porto"
 license: MIT
+version: "1.0.0"
+date-released: "2026-11-19"
+repository-code: "https://github.com/renatosocodato/increment-state-cycles"
+url: "https://github.com/renatosocodato/increment-state-cycles/releases/tag/v1.0.0"

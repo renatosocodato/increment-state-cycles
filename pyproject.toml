@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "increment-state-cycles"
+version = "1.0.0"
+description = "Physical time-reversal contrasts for ternary increment sequences"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Renato Socodato"}]
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/renatosocodato/increment-state-cycles"
+
+[project.scripts]
+increment-state-cycles = "increment_state_cycles.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

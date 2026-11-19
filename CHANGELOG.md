@@ -1,4 +1,12 @@
-# Reproducibility package changes
+# Changelog
+
+## v1.0.0
+
+- Added an installable Python API and CSV command for physical reversal and empirical E/P/R contrasts.
+- Added a single command for reproducing all five article figures in R in an isolated directory.
+- Added API and CLI tests, an example dataset and version-specific software citation.
+
+The source and saved results for the article are preserved from the commit cited in the EPJ E proof.
 
 ## 2026-11-18 — verification improvements
 
