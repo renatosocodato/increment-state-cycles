@@ -134,10 +134,18 @@ def windows(groups, mode, stride):
     return tracks, eligible_trace_keys
 
 
-def calculate(groups, mode):
+def calculate(groups, mode, reference_support=None):
     rows, counts = [], []
     for stride in STRIDES:
-        traces, eligible_traces = windows(groups, mode, stride)
+        stride_groups = groups
+        if reference_support is not None:
+            keys = reference_support[stride]
+            stride_groups = {phase: {trace: slots for trace, slots in traces.items()
+                                     if (phase, trace) in keys}
+                             for phase, traces in groups.items()}
+        traces, eligible_traces = windows(stride_groups, mode, stride)
+        if reference_support is not None:
+            assert eligible_traces == reference_support[stride]
         for threshold in THRESHOLDS:
             metrics = {}
             for key, fragments in traces.items():
@@ -169,12 +177,16 @@ def main():
     assert version("increment-state-cycles") == "1.1.0"
     data, audit = load(args.feather_directory)
     series, tables, counts = [], [], []
-    for mode in ("equal_windows", "same_support"):
-        animals, trace_counts = calculate(build_tracks(data, mode), mode)
+    strict = build_tracks(data, "same_support")
+    support = {stride: windows(strict, "same_support", stride)[1] for stride in STRIDES}
+    for mode in ("equal_windows", "same_support", "same_ids"):
+        tracks = strict if mode == "same_support" else build_tracks(data, "equal_windows")
+        animals, trace_counts = calculate(tracks, mode, support if mode == "same_ids" else None)
         assert len(animals.groupby(GRID)) == len(THRESHOLDS) * len(STRIDES)
         series.append(animals)
         counts.extend(trace_counts)
-    equal, same = series
+    equal, same, ids_only = series
+    assert same[GRID + ["animal"]].equals(ids_only[GRID + ["animal"]])
     matched_animals = equal.merge(same[GRID + ["animal"]], on=GRID + ["animal"], validate="one_to_one")
     matched_animals["mode"] = "equal_windows_same_animals"
     series.append(matched_animals)
@@ -184,11 +196,26 @@ def main():
         for cohort, subset in (("eligible_by_setting", animals),
                                ("fixed_across_grid", animals.loc[animals.animal.isin(fixed)])):
             tables.extend(dict(mode=mode, **row) for row in estimates(subset, cohort))
+    increments = []
+    for label, reduced, wider in (("restrict_ids", ids_only, matched_animals),
+                                  ("restrict_slots", same, ids_only)):
+        keys = GRID + ["animal", "genotype"]
+        delta = reduced[keys + ["change"]].merge(
+            wider[keys + ["change"]], on=keys, validate="one_to_one",
+            suffixes=("_reduced", "_wider"))
+        assert len(delta) == len(reduced) == len(wider)
+        delta["change"] = delta.change_reduced - delta.change_wider
+        increments.extend(dict(step=label, **row)
+                          for row in estimates(delta, "eligible_by_setting"))
     args.output.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(increments).to_csv(args.output / "efeitos_das_restricoes.csv", index=False)
     pd.DataFrame(tables).to_csv(args.output / "interacao.csv", index=False)
     pd.DataFrame(counts).to_csv(args.output / "contagens.csv", index=False)
     if not args.aggregate_only:
         pd.concat(series, ignore_index=True).to_csv(args.output / "mudanca_por_animal.csv", index=False)
+        trace_columns = ["animal", "genotype", "cell", "protrusion"]
+        target = [trace for phase, trace in support[1] if phase == "Before"]
+        pd.DataFrame(sorted(target), columns=trace_columns).to_csv(args.output / "alvos_visuais.csv", index=False)
         (args.output / "origem.json").write_text(json.dumps(audit, indent=2) + "\n")
 
 

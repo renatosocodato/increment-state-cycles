@@ -8,11 +8,12 @@ The closest equal windows have 59 nominal observations each, frames 1–59 and 6
 | --- | --- | ---: | ---: | --- |
 | Equal nominal windows, all observed traces | 7 / 7 | +0.271 | +0.175 | −0.096 [−0.228, +0.043] |
 | Equal nominal windows, same animals as the matched traces | 4 / 5 | +0.284 | +0.160 | −0.124 [−0.300, +0.054] |
+| Same eligible protrusion IDs, all valid frames in each phase | 4 / 5 | +0.066 | +0.149 | +0.083 [−0.216, +0.408] |
 | Same tracked protrusions and same relative frame support | 4 / 5 | −0.102 | +0.052 | +0.154 [−0.148, +0.526] |
 
-At 1 minute, the strict analysis contains 27 eligible protrusion IDs observed in both windows. At 4 minutes, 23 remain. Strict matching retains only relative frame slots with coordinates in both phases, splits on missing slots, and yields identical eligible window counts before and after within each animal. Estimates had negative signs in 16/18 settings with all observed traces, 15/18 with all traces in the matched animals and 1/18 with strict matching. Fixing membership within each analysis across the full grid yielded 17/18, 17/18 and 1/18 negative, respectively. At the nominal reference setting, omitting one animal at a time left the all-traces interactions negative, while the strict estimate could change sign.
+Within each sampling setting, the ID-only analysis uses exactly the protrusion IDs retained by strict frame matching. It keeps all valid frames within each phase for those IDs and still breaks at gaps. At 1 minute both restrictions use the same 27 IDs and the same nine animals. The step from all traces in those nine animals to the same IDs shifts the interaction by +0.207 (paired-by-animal bootstrap 95% interval [−0.058, +0.591]). Requiring the same relative frame slots then shifts it by +0.071 [−0.154, +0.256]. These are changes in the estimate when changing the analysis population and support, with no causal interpretation. The ID restriction shifted the interaction upward at all 18 settings and the slot restriction at 17/18. Both the ID-only and the strict interaction estimates were negative in only 1/18 settings.
 
-This reversal persists when animal membership is held constant at the reference setting. The strict estimate describes the subset of trace IDs and frame slots observed on both sides of injury. That subset can differ in preexisting behavior, persistence or trackability. The contrast between analysis modes cannot identify the contribution of each source of selection or establish a genotype effect on lesion response. The intervals are percentile intervals from 5,000 bootstrap draws of animals within genotype, preserving within-animal phase differences. They are pointwise and describe a small cohort. Repeating the strict comparison with prospectively tracked IDs and matched frame coverage would discriminate a trace-composition explanation from a reproducible difference in within-trace dynamics.
+The intervals are percentile intervals from 5,000 bootstrap draws of animals within genotype, preserving within-animal phase differences and, for the two steps, the paired analysis modes. They are pointwise and describe a small cohort. At 4 minutes the strict comparison retains 23 protrusion IDs. Differences in baseline behavior, persistence and trackability remain live explanations. The comparison cannot establish a genotype effect on lesion response.
 
 ## Reproduce
 
@@ -22,4 +23,8 @@ Provide the original Feather archive directory containing `xy_frame_features.fea
 python analisar.py /path/to/cohort1_intravital/feather --output results --aggregate-only
 ```
 
-`interacao.csv` and `contagens.csv` contain only aggregate estimates and counts. Omit `--aggregate-only` when working locally to save individual changes and the source audit. The manuscript and software release are independent of this exploratory application.
+`interacao.csv`, `contagens.csv` and `efeitos_das_restricoes.csv` contain only aggregate estimates and counts. Omit `--aggregate-only` when working locally to save individual changes and the source audit. The manuscript and software release are independent of this exploratory application.
+
+## Visual review of the phase boundary
+
+All 27 target IDs were linked to nine deposited movie files and visually inspected with tip and soma overlays in frames 58–61 around the documented transition. Tracking has coordinates on both sides of the boundary for all 27 IDs. The overlays used the TIFF pixel calibration for image display, which placed the soma markers on the expected cell bodies. Several terminal processes were faint or were close enough to neighboring tips that unique identity remained unresolved. The review therefore supports field and soma correspondence and flags ambiguities at the branch level. It is a targeted review of boundary frames, not an independent retracking of the full sequences. The reported contrasts retain the original tracking assignments and do not selectively exclude ambiguous targets.
