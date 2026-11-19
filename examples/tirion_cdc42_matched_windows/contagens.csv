@@ -1,0 +1,7 @@
+mode,stride_min,before_traces,after_traces
+equal_windows,1,245,136
+equal_windows,2,242,129
+equal_windows,4,237,119
+same_support,1,27,27
+same_support,2,27,27
+same_support,4,23,23
