@@ -36,7 +36,7 @@ def rejected(target, program, label, expected, *, extra_env=None, options=()):
 
 with tempfile.TemporaryDirectory(prefix='epje_negative_') as temp:
     t = Path(temp) / 'repo'
-    shutil.copytree(root, t, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pdf', '*.png', '*.svg', '*.eps'))
+    shutil.copytree(root, t, ignore=shutil.ignore_patterns('.git', '.lake', '__pycache__', '*.pdf', '*.png', '*.svg', '*.eps'))
     accepted(t, 'run_checks.py')
     generator = t / 'versao_expandida_20261117/figures_r/exact_word_laws.py'
     original = generator.read_text(); generator.write_text('pass\n')
@@ -76,6 +76,9 @@ with tempfile.TemporaryDirectory(prefix='epje_negative_') as temp:
     rejected(t, 'run_checks.py', 'off-lattice rotor contrast', ('verify_physical_saved.py', 'integer window counts'))
     p.write_text(original)
     for p in sorted(t.rglob('*.py')):
+        # Applied examples use their own inputs and are outside article reproduction.
+        if p.relative_to(t).parts[0] == 'examples':
+            continue
         tree = ast.parse(p.read_text())
         requires_assertions = any(isinstance(node, ast.Assert) for node in ast.walk(tree))
         if requires_assertions or p.name in {'run_checks.py', 'verify_regeneration.py', 'test_checks.py'}:
@@ -96,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix='epje_negative_') as temp:
     print('PASS: exact integer JSON comparison and floating tolerance')
 
 with tempfile.TemporaryDirectory(prefix='epje_integrity_') as temp:
-    t = Path(temp) / 'repo'; shutil.copytree(root, t, ignore=shutil.ignore_patterns('.git', '__pycache__'))
+    t = Path(temp) / 'repo'; shutil.copytree(root, t, ignore=shutil.ignore_patterns('.git', '.lake', '__pycache__'))
     accepted(t, 'verify_integrity.py')
     p = t / 'versao_expandida_20261117/extensao_misturante_20261117/mixing_curves.csv'
     p.write_bytes(p.read_bytes() + b'\n')

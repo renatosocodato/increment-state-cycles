@@ -1,0 +1,40 @@
+name = "epje-increment-cycles-check"
+defaultTargets = ["IncrementCycles", "RotorRational", "RotorEnclosure", "ObservedReversal", "ResetMixing", "RotorMatching", "RotorFourier", "RotorGenerator", "CycleExpansion", "StatementDomains", "StatementAlignment"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "81a5d257c8e410db227a6665ed08f64fea08e997"
+
+[[lean_lib]]
+name = "IncrementCycles"
+
+[[lean_lib]]
+name = "RotorRational"
+
+[[lean_lib]]
+name = "RotorEnclosure"
+
+[[lean_lib]]
+name = "ObservedReversal"
+
+[[lean_lib]]
+name = "ResetMixing"
+
+[[lean_lib]]
+name = "RotorMatching"
+
+[[lean_lib]]
+name = "RotorFourier"
+
+[[lean_lib]]
+name = "RotorGenerator"
+
+[[lean_lib]]
+name = "CycleExpansion"
+
+[[lean_lib]]
+name = "StatementDomains"
+
+[[lean_lib]]
+name = "StatementAlignment"

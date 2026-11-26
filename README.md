@@ -68,6 +68,10 @@ The figure inputs below are relative to each renderer's directory. Figure 1 uses
 
 The first four directories are under `versao_expandida_20261117/`. The Figure 1 renderer also reads saved tables to produce two earlier exploratory figures that the release command does not copy to the output directory.
 
+## Verify the mathematical results in Lean 4
+
+The [Lean companion](formal/lean/) has its own [formalization release](https://github.com/renatosocodato/increment-state-cycles/releases/tag/epje-lean-v1.0.0). It includes a map from the manuscript equations to the checked statements and documents how to reproduce the axiom report. Lean is optional for Python and figure reproduction.
+
 ## Computational environment
 
 The files were prepared and tested in Python 3.14.7, NumPy 2.3.5, SciPy 1.16.3, pandas 2.3.3, SymPy 1.14.0 and R 4.5.2. The R figures use ggplot2 4.0.2, cowplot 1.2.0, svglite 2.2.2, ragg 1.5.0 and jsonlite 2.0.0. Cairo and an installed, appropriately licensed Arial font are required to reproduce the vector typography. Numeric results are portable within usual floating-point tolerance; vector files can differ bytewise across R, Cairo, font, and operating-system versions. These requirements describe the tested current environment, not a guarantee of bitwise reproduction on all platforms.

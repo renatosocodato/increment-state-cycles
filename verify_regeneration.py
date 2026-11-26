@@ -40,7 +40,7 @@ def compare(p,q):
  return True
 with tempfile.TemporaryDirectory(prefix='epje_reproduce_') as tmp:
  target=Path(tmp)/'repro'
- shutil.copytree(root,target,ignore=shutil.ignore_patterns('.git','__pycache__','*.pdf','*.png','*.svg','*.eps'))
+ shutil.copytree(root,target,ignore=shutil.ignore_patterns('.git','.lake','__pycache__','*.pdf','*.png','*.svg','*.eps'))
  for script,files in jobs:
   print('Running',script,flush=True)
   # Remove only this job's expected outputs: preserved inputs and results from
